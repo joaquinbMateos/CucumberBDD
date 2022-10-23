@@ -85,7 +85,6 @@ public class rahulshettyPracticePage extends BasePage {
         }
     }
 
-
     public void tabButton(){
         click(open_tab_btn);
     }

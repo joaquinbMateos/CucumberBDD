@@ -3,6 +3,7 @@ package stepDefinition.PracticePage;
 import PageObjects.rahulshettyPracticePage;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -12,10 +13,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
 
 public class stepDefinitionPracticePage {
     private WebDriver driver;
@@ -25,9 +28,23 @@ public class stepDefinitionPracticePage {
 
 
     @Before
-    public void setUp(){
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+    public void setUp(Scenario scenario) throws MalformedURLException {
+        ChromeOptions options = new ChromeOptions();
+        options.setPlatformName("Windows 10");
+        options.setBrowserVersion("latest");
+
+        Map<String, Object> sauceOptions = new HashMap<>();
+        sauceOptions.put("username", System.getenv("SAUCE_USERNAME"));
+        sauceOptions.put("accessKey", System.getenv("SAUCE_ACCESS_KEY"));
+        sauceOptions.put("name", scenario.getName());
+
+        options.setCapability("sauce:options", sauceOptions);
+        URL url = new URL("https://ondemand.us-west-1.saucelabs.com/wd/hub");
+
+        driver = new RemoteWebDriver(url, options);
+
+        //WebDriverManager.chromedriver().setup();
+        //driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
 
@@ -75,13 +92,13 @@ public class stepDefinitionPracticePage {
 
     //Drop Down:
     @When("I select {string} from dropdown")
-    public void dropDown(String arg){
-        switch(arg){
+    public void dropDown(String option){
+        switch(option){
             case "Option2":
-                page.dropDownOption(arg);
+                page.dropDownOption(option);
                 break;
             case "Option3":
-                page.dropDownOptionMouse(arg);
+                page.dropDownOptionMouse(option);
                 break;
             default:
                 break;

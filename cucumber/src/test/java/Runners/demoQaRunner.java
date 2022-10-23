@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
         features = {"src/test/resources/DemoQa/demoQa.feature"},
         glue = {"stepDefinition/DemoQa"},
         plugin = {"pretty"}
-        ,tags = "@Submit"
+        //,tags = "@BirthDate"
 )
 public class demoQaRunner {
 }

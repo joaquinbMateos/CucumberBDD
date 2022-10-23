@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
         features = {"src/test/resources/PracticePage/practicePage.feature"},
         glue = {"stepDefinition/PracticePage"},
         plugin = {"pretty"}
-        //,tags = "~@HeaderButtons"
+        //,tags = "@"
 )
 
 public class practicePageRunner {

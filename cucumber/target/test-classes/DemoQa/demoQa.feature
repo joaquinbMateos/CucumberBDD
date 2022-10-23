@@ -31,11 +31,11 @@ Feature: DemoQa Page
   @BirthDate
   Scenario Outline: As user I want to complete my birthdate
     Given I am in "https://demoqa.com/automation-practice-form"
-    When I complete brithdate
-    Then validate "<date>"
+    When I complete "<day>","<month>","<year>"
+    Then validate "<day>","<month>","<year>"
     Examples:
-    |date       |
-    |22 Mar 1991|
+    |date       |day|month|year|
+    |22 Mar 1991|22 |Mar  |1991|
 
   @Hobby
   Scenario: As user I want to select a hobby
@@ -64,7 +64,11 @@ Feature: DemoQa Page
   Scenario: As user I want to submit information
     Given I am in "https://demoqa.com/automation-practice-form"
     When I fill "name" input with "myName"
+    Then validate "name" input with "myName"
     And  I fill "lastName" input with "myLastName"
+    Then validate "lastName" input with "myLastName"
     And I fill "mobile" input with "1234567890"
+    Then validate "mobile" input with "1234567890"
     And I click on gender button
     And I click on submit
+    Then I close popup

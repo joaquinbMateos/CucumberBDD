@@ -7,19 +7,44 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StepDefinitionDemoQA {
     private static WebDriver driver;
     private demoQaPage page;
 
-    @BeforeAll
-    public static void setUp(){
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+    @Before
+    public void setUp(Scenario scenario) throws MalformedURLException {
+
+        ChromeOptions options = new ChromeOptions();
+        options.setPlatformName("Windows 10");
+        options.setBrowserVersion("latest");
+
+        Map<String, Object> sauceOptions = new HashMap<>();
+        sauceOptions.put("username", System.getenv("SAUCE_USERNAME"));
+        sauceOptions.put("accessKey", System.getenv("SAUCE_ACCESS_KEY"));
+        sauceOptions.put("name", scenario.getName());
+
+        options.setCapability("sauce:options", sauceOptions);
+        URL url = new URL("https://ondemand.us-west-1.saucelabs.com/wd/hub");
+
+        driver = new RemoteWebDriver(url, options);
+
+        //WebDriverManager.chromedriver().setup();
+        //driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
 
@@ -66,13 +91,13 @@ public class StepDefinitionDemoQA {
     }
 
     //Birth Date:
-    @When("I complete brithdate")
-    public void completeBirthDate(){
-        page.completeBirthDate();
+    @When("I complete {string},{string},{string}")
+    public void completeBirthDate(String day, String month, String year){
+        page.completeBirthDate(day,month,year);
     }
-    @Then("validate {string}")
-    public void validateDate(String date){
-        page.verifyDate(date);
+    @Then("validate {string},{string},{string}")
+    public void validateDate(String day, String month, String year){
+        page.verifyDate(day,month,year);
     }
 
     //Hobby:
@@ -119,8 +144,12 @@ public class StepDefinitionDemoQA {
         page.clickSubmit();
     }
 
-    @AfterAll
-    public static void tearDown(){
-        //driver.quit();
+    @Then ("I close popup")
+    public void closePopup(){
+        page.closePopup();
+    }
+    @After
+    public void tearDown(){
+        driver.quit();
     }
 }

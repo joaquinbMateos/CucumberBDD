@@ -46,4 +46,5 @@ public abstract class BasePage {
     protected void getAttribute(By locator, String attributeName) {
         driver.findElement(locator).getAttribute(attributeName);
     }
+
 }
